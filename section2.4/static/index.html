@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Socket.io Rooms</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <h1>Socket.io Rooms</h1>
+        <button id="one">Namespace1</button>
+       <button id="two">Namespace2</button>
+       <ul id="list_one"></ul>
+       <ul id="list_two"></ul>
+
+       
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+        <script src="../socket.io/socket.io.js" async defer></script>
+        <script>
+        var one =io('/namespace1',{transport:['websocket'],upgrade:false});
+        var two=io('/namespace2',{transport:['websocket'],upgrade:false});
+
+        document.getElementById('one').addEventListener('click',(e)=>{
+          one.emit('event','Hello! from one');
+        });
+        document.getElementById('two').addEventListener('click',(e)=>{
+        two.emit('event','Hello! from two')
+        });
+
+        var addLi=(ul)=>{
+          return (message)=>{
+            var li=document.createElement('li');
+            li.appendChild(document.createTextNode(message));
+            document.getElementById(ul).appendChild(li);
+          }
+        }
+
+        one.on('event',addLi('list_one'));
+        two.on('event',addLi('list_two'));
+        </script>
+    </body>
+</html>
